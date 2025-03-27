@@ -1,4 +1,4 @@
-/* Reset margin & padding untuk responsivitas */
+/* Reset margin & padding */
 * {
     margin: 0;
     padding: 0;
@@ -15,7 +15,7 @@
     overflow-x: hidden;
   }
   
-  /* Container dengan animasi masuk */
+  /* Quiz container dengan animasi masuk */
   #quiz-container {
     background: #ffffff;
     border-radius: 15px;
@@ -37,10 +37,32 @@
     margin-bottom: 20px;
   }
   
+  /* Progress Bar */
+  #progress-container {
+    background: #ddd;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    height: 10px;
+    width: 80%;
+    margin: 0 auto 20px;
+    overflow: hidden;
+  }
+  #progress {
+    background: #ff4d4d;
+    height: 100%;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
   p#question {
     font-size: 1.2em;
     margin-bottom: 15px;
     color: #333;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  p#question.show {
+    opacity: 1;
   }
   
   input[type="text"] {

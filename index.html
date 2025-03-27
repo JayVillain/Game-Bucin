@@ -8,14 +8,31 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+  <!-- Audio Background dan Efek Suara -->
+  <audio id="bgMusic" loop>
+    <source src="music.mp3" type="audio/mpeg">
+    Browser kamu tidak mendukung audio.
+  </audio>
+  <audio id="correctSound">
+    <source src="correct.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="wrongSound">
+    <source src="wrong.mp3" type="audio/mpeg">
+  </audio>
+
   <div id="quiz-container">
     <h1>Kuis Pasangan 💕</h1>
-    <p id="question"></p>
+    <!-- Progress Bar -->
+    <div id="progress-container">
+      <div id="progress"></div>
+    </div>
+    <p id="question" class="fade"></p>
     <input type="text" id="answer" placeholder="Jawaban kamu...">
     <button onclick="checkAnswer()">Submit</button>
     <p id="feedback"></p>
   </div>
   <div id="fireworks"></div>
+
   <script src="script.js"></script>
 </body>
 </html>

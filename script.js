@@ -5,24 +5,47 @@ const questions = [
   ];
   
   let currentQuestion = 0;
+  const totalQuestions = questions.length;
+  const questionEl = document.getElementById("question");
+  const feedbackEl = document.getElementById("feedback");
+  const progressEl = document.getElementById("progress");
+  
+  // Mulai background music saat halaman dimuat
+  window.onload = () => {
+    document.getElementById("bgMusic").volume = 0.3;
+    document.getElementById("bgMusic").play();
+    showQuestion();
+  };
   
   function showQuestion() {
-    document.getElementById("question").innerText = questions[currentQuestion].q;
+    // Reset transisi (fade-out kemudian fade-in)
+    questionEl.classList.remove("show");
+    setTimeout(() => {
+      questionEl.innerText = questions[currentQuestion].q;
+      questionEl.classList.add("show");
+    }, 200);
+  
+    // Update progress bar
+    progressEl.style.width = ((currentQuestion / totalQuestions) * 100) + "%";
+    feedbackEl.innerText = "";
     document.getElementById("answer").value = "";
-    document.getElementById("feedback").innerText = "";
   }
   
   function checkAnswer() {
     const answer = document.getElementById("answer").value.toLowerCase().trim();
     if (answer === questions[currentQuestion].a.toLowerCase()) {
+      // Putar suara jawaban benar
+      document.getElementById("correctSound").play();
       currentQuestion++;
-      if (currentQuestion < questions.length) {
+      if (currentQuestion < totalQuestions) {
         showQuestion();
       } else {
         celebrateSuccess();
       }
     } else {
-      document.getElementById("feedback").innerText = "Jawaban salah, coba lagi!";
+      // Putar suara jawaban salah dan tampilkan feedback interaktif
+      document.getElementById("wrongSound").play();
+      feedbackEl.innerText = "Jawaban salah, coba lagi! 😢";
     }
   }
   
@@ -56,8 +79,8 @@ const questions = [
     const fireworksContainer = document.getElementById("fireworks");
     fireworksContainer.style.display = "block";
     
-    // Tampilkan fireworks
-    const numberOfFireworks = 40;
+    // Tampilkan lebih banyak fireworks
+    const numberOfFireworks = 50;
     for (let i = 0; i < numberOfFireworks; i++) {
       const x = Math.random() * window.innerWidth;
       const y = Math.random() * window.innerHeight * 0.8;
@@ -70,7 +93,7 @@ const questions = [
       clearInterval(confettiInterval);
       fireworksContainer.style.display = "none";
     }, 3000);
+    
+    // Update progress bar ke 100%
+    progressEl.style.width = "100%";
   }
-  
-  showQuestion();
-  
