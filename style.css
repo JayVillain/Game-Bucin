@@ -9,13 +9,32 @@
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(135deg, #ffe6e6, #fff2f2);
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
     overflow-x: hidden;
   }
   
-  /* Quiz container dengan animasi masuk */
+  /* Tombol toggle musik */
+  #musicToggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    border: none;
+    background-color: #ff4d4d;
+    color: white;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    z-index: 100;
+  }
+  #musicToggle:hover {
+    background-color: #e60000;
+  }
+  
+  /* Quiz container */
   #quiz-container {
     background: #ffffff;
     border-radius: 15px;
@@ -26,7 +45,6 @@
     text-align: center;
     animation: fadeIn 1s ease-out;
   }
-  
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -37,7 +55,6 @@
     margin-bottom: 20px;
   }
   
-  /* Progress Bar */
   #progress-container {
     background: #ddd;
     border-radius: 5px;
@@ -54,14 +71,14 @@
     transition: width 0.5s ease;
   }
   
-  p#question {
+  #question {
     font-size: 1.2em;
     margin-bottom: 15px;
     color: #333;
     opacity: 0;
     transition: opacity 0.5s ease;
   }
-  p#question.show {
+  #question.show {
     opacity: 1;
   }
   
@@ -74,7 +91,6 @@
     font-size: 1em;
     transition: border-color 0.3s ease;
   }
-  
   input[type="text"]:focus {
     border-color: #ff4d4d;
     outline: none;
@@ -91,7 +107,6 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
     margin-bottom: 15px;
   }
-  
   button:hover {
     background-color: #e60000;
     transform: scale(1.05);
@@ -115,8 +130,6 @@
     display: none;
     z-index: 100;
   }
-  
-  /* Firework element */
   .firework {
     position: absolute;
     width: 8px;
@@ -125,7 +138,6 @@
     border-radius: 50%;
     animation: explode 1.5s ease-out forwards;
   }
-  
   @keyframes explode {
     0% {
       transform: scale(0);
@@ -147,7 +159,6 @@
     transform: rotate(45deg);
     animation: fall 2s linear forwards;
   }
-  
   @keyframes fall {
     0% {
       transform: translateY(0) rotate(0deg);
@@ -159,10 +170,9 @@
     }
   }
   
-  /* Responsive adjustments */
   @media (max-width: 600px) {
     h1 { font-size: 1.8em; }
-    p#question { font-size: 1.1em; }
+    #question { font-size: 1.1em; }
     input[type="text"], button { font-size: 0.9em; }
   }
   

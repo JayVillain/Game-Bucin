@@ -9,23 +9,22 @@ const questions = [
   const questionEl = document.getElementById("question");
   const feedbackEl = document.getElementById("feedback");
   const progressEl = document.getElementById("progress");
+  const bgMusic = document.getElementById("bgMusic");
+  let isMusicPlaying = true;
   
-  // Mulai background music saat halaman dimuat
   window.onload = () => {
-    document.getElementById("bgMusic").volume = 0.3;
-    document.getElementById("bgMusic").play();
+    bgMusic.volume = 0.3;
+    // Coba autoplay musik; browser modern mungkin membutuhkan interaksi pengguna
+    bgMusic.play().catch(err => console.error("Autoplay gagal:", err));
     showQuestion();
   };
   
   function showQuestion() {
-    // Reset transisi (fade-out kemudian fade-in)
     questionEl.classList.remove("show");
     setTimeout(() => {
       questionEl.innerText = questions[currentQuestion].q;
       questionEl.classList.add("show");
     }, 200);
-  
-    // Update progress bar
     progressEl.style.width = ((currentQuestion / totalQuestions) * 100) + "%";
     feedbackEl.innerText = "";
     document.getElementById("answer").value = "";
@@ -34,8 +33,6 @@ const questions = [
   function checkAnswer() {
     const answer = document.getElementById("answer").value.toLowerCase().trim();
     if (answer === questions[currentQuestion].a.toLowerCase()) {
-      // Putar suara jawaban benar
-      document.getElementById("correctSound").play();
       currentQuestion++;
       if (currentQuestion < totalQuestions) {
         showQuestion();
@@ -43,8 +40,6 @@ const questions = [
         celebrateSuccess();
       }
     } else {
-      // Putar suara jawaban salah dan tampilkan feedback interaktif
-      document.getElementById("wrongSound").play();
       feedbackEl.innerText = "Jawaban salah, coba lagi! 😢";
     }
   }
@@ -78,22 +73,30 @@ const questions = [
     quizContainer.innerHTML = "<h1>Selamat! 🎉</h1><p>Kamu berhasil menjawab semua pertanyaan!</p>";
     const fireworksContainer = document.getElementById("fireworks");
     fireworksContainer.style.display = "block";
-    
-    // Tampilkan lebih banyak fireworks
     const numberOfFireworks = 50;
     for (let i = 0; i < numberOfFireworks; i++) {
       const x = Math.random() * window.innerWidth;
       const y = Math.random() * window.innerHeight * 0.8;
       createFirework(x, y);
     }
-    
-    // Tampilkan confetti secara berulang
     const confettiInterval = setInterval(createConfetti, 100);
     setTimeout(() => {
       clearInterval(confettiInterval);
       fireworksContainer.style.display = "none";
     }, 3000);
-    
-    // Update progress bar ke 100%
     progressEl.style.width = "100%";
   }
+  
+  function toggleMusic() {
+    const musicBtn = document.getElementById("musicToggle");
+    if (isMusicPlaying) {
+      bgMusic.pause();
+      isMusicPlaying = false;
+      musicBtn.textContent = "Putar Musik 🎶";
+    } else {
+      bgMusic.play().catch(err => console.error("Play music error:", err));
+      isMusicPlaying = true;
+      musicBtn.textContent = "Hentikan Musik 🎵";
+    }
+  }
+  
