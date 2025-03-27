@@ -188,11 +188,11 @@ const questions = [
     
     // Umpan balik dinamis
     if(successRate >= 90) {
-      performanceMessageEl.innerText = "Luar biasa! Kamu benar-benar mengenalku dengan sempurna!";
+      performanceMessageEl.innerText = "Luar biasa! Kamu benar-benar emang pacar aku!";
     } else if(successRate >= 70) {
-      performanceMessageEl.innerText = "Bagus! Tapi masih ada ruang untuk lebih mengenal lagi.";
+      performanceMessageEl.innerText = "Bagus! udah mulai gasayang nih ya";
     } else {
-      performanceMessageEl.innerText = "Hmmm, ayo coba lagi supaya semakin dekat!";
+      performanceMessageEl.innerText = "Hmmm, ternyata kamu emang udh gasayang aku okeh fine!!!";
     }
     
     // Luncurkan partikel overlay sebagai sentuhan akhir
