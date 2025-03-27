@@ -1,8 +1,8 @@
 // Array pertanyaan dengan narasi (story) dan counter percobaan per pertanyaan
 const questions = [
-    { q: "Apa makanan favorit aku?", a: "pizza", story: "Makanan yang selalu membuatku tersenyum.", attempts: 0 },
-    { q: "Dimana kita pertama kali ketemu?", a: "mall", story: "Tempat itu selalu jadi kenangan manis kita.", attempts: 0 },
-    { q: "Tanggal jadian kita? (DD/MM/YYYY)", a: "14/02/2023", story: "Hari penuh cinta yang tak terlupakan.", attempts: 0 }
+    { q: "Apa makanan favorit aku?", a: "mie", story: "Makanan yang selalu membuatku tersenyum.", attempts: 0 },
+    { q: "Dimana kita pertama kali ketemu?", a: "kelas", story: "Tempat itu selalu jadi kenangan manis kita.", attempts: 0 },
+    { q: "Tanggal jadian kita? (DD/MM/YYYY)", a: "26/02/2024", story: "Hari penuh cinta yang tak terlupakan.", attempts: 0 }
   ];
   
   let currentQuestion = 0;
