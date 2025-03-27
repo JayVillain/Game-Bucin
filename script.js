@@ -1,69 +1,98 @@
+// Array pertanyaan dengan narasi (story) dan counter percobaan per pertanyaan
 const questions = [
-    { q: "Apa makanan favorit aku?", a: "pizza", story: "Makanan yang selalu membuatku bahagia!" },
-    { q: "Dimana kita pertama kali ketemu?", a: "mall", story: "Tempat itu jadi kenangan manis kita." },
-    { q: "Tanggal jadian kita? (DD/MM/YYYY)", a: "14/02/2023", story: "Hari itu penuh cinta." }
+    { q: "Apa makanan favorit aku?", a: "pizza", story: "Makanan yang selalu membuatku tersenyum.", attempts: 0 },
+    { q: "Dimana kita pertama kali ketemu?", a: "mall", story: "Tempat itu selalu jadi kenangan manis kita.", attempts: 0 },
+    { q: "Tanggal jadian kita? (DD/MM/YYYY)", a: "14/02/2023", story: "Hari penuh cinta yang tak terlupakan.", attempts: 0 }
   ];
   
   let currentQuestion = 0;
   const totalQuestions = questions.length;
-  let quizStartTime = Date.now();
+  let quizStartTime;
+  let totalAttempts = 0;
+  let userName = "";
   
+  // Elemen DOM
+  const startScreen = document.getElementById("start-screen");
+  const userNameInput = document.getElementById("userNameInput");
+  const quizContainer = document.getElementById("quiz-container");
   const questionEl = document.getElementById("question");
   const storyEl = document.getElementById("story");
   const feedbackEl = document.getElementById("feedback");
+  const answerInput = document.getElementById("answer");
   const progressEl = document.getElementById("progress");
+  const statisticsEl = document.getElementById("statistics");
+  const statTextEl = document.getElementById("statText");
+  const performanceMessageEl = document.getElementById("performanceMessage");
+  const particleOverlay = document.getElementById("particle-overlay");
   const bgMusic = document.getElementById("bgMusic");
   const volumeSlider = document.getElementById("volumeSlider");
   
   let isMusicPlaying = true;
   
-  // Atur volume dari slider
+  // Set volume dari slider
   volumeSlider.addEventListener("input", () => {
     bgMusic.volume = volumeSlider.value;
   });
   
-  // Mulai musik & tampilkan pertanyaan
-  window.onload = () => {
-    bgMusic.volume = volumeSlider.value;
-    bgMusic.play().catch(err => console.error("Autoplay gagal:", err));
+  // Mulai kuis setelah input nama
+  function startQuiz() {
+    userName = userNameInput.value.trim();
+    if (userName === "") {
+      alert("Tolong masukkan nama kamu!");
+      return;
+    }
+    startScreen.classList.add("hidden");
+    document.getElementById("audio-controls").classList.remove("hidden");
+    quizContainer.classList.remove("hidden");
+    // Set background dinamis awal
+    updateBackground(0);
+    quizStartTime = Date.now();
     showQuestion();
-  };
+  }
   
+  // Tampilkan pertanyaan dengan animasi slide-in
   function showQuestion() {
     // Reset animasi dan feedback
     questionEl.classList.remove("show");
-    storyEl.textContent = "";
     feedbackEl.textContent = "";
-    document.getElementById("answer").classList.remove("error");
-    
-    setTimeout(() => {
-      questionEl.innerText = questions[currentQuestion].q;
-      questionEl.classList.add("show");
-      // Tampilkan pesan cerita interaktif secara singkat
-      storyEl.textContent = questions[currentQuestion].story;
-    }, 200);
+    answerInput.classList.remove("error");
     
     // Update progress bar
     progressEl.style.width = ((currentQuestion / totalQuestions) * 100) + "%";
+    // Update background berdasarkan progress
+    updateBackground(currentQuestion / totalQuestions);
+    
+    setTimeout(() => {
+      questionEl.innerText = questions[currentQuestion].q;
+      // Sisipkan nama pengguna ke dalam narasi bila relevan
+      storyEl.innerText = questions[currentQuestion].story.replace("{nama}", userName);
+      questionEl.classList.add("show");
+    }, 300);
     
     // Reset input
-    document.getElementById("answer").value = "";
+    answerInput.value = "";
   }
   
+  // Cek jawaban dan hitung percobaan
   function checkAnswer() {
-    const answerInput = document.getElementById("answer");
     const answer = answerInput.value.toLowerCase().trim();
+    questions[currentQuestion].attempts++;
+    totalAttempts++;
     if (answer === questions[currentQuestion].a.toLowerCase()) {
-      // Mainkan suara benar
+      // Mainkan suara jawaban benar
       document.getElementById("correctSound").play().catch(err => console.error(err));
-      currentQuestion++;
-      if (currentQuestion < totalQuestions) {
-        showQuestion();
-      } else {
-        quizEnd();
-      }
+      // Transisi keluar (slide-out) sebelum pindah ke pertanyaan berikutnya
+      questionEl.classList.remove("show");
+      setTimeout(() => {
+        currentQuestion++;
+        if (currentQuestion < totalQuestions) {
+          showQuestion();
+        } else {
+          quizEnd();
+        }
+      }, 500);
     } else {
-      // Mainkan suara salah dan tampilkan feedback
+      // Mainkan suara salah dan tampilkan feedback serta animasi getar
       document.getElementById("wrongSound").play().catch(err => console.error(err));
       feedbackEl.innerText = "Jawaban salah, coba lagi! 😢";
       answerInput.classList.add("error");
@@ -71,30 +100,31 @@ const questions = [
     }
   }
   
-  function createFirework(x, y) {
-    const firework = document.createElement('div');
-    firework.classList.add('firework');
-    firework.style.left = x + 'px';
-    firework.style.top = y + 'px';
-    const offsetX = (Math.random() - 0.5) * 200;
-    const offsetY = (Math.random() - 0.5) * 200;
-    firework.style.setProperty('--x', offsetX + 'px');
-    firework.style.setProperty('--y', offsetY + 'px');
-    document.getElementById('fireworks').appendChild(firework);
-    setTimeout(() => firework.remove(), 1500);
+  // Fungsi overlay background dinamis (ubah gradasi berdasarkan progress)
+  function updateBackground(progressRatio) {
+    // Misalnya, background berubah dari warna lembut ke lebih intens
+    const startColor = [255, 230, 230]; // RGB awal
+    const endColor = [255, 128, 128]; // RGB akhir
+    const r = Math.floor(startColor[0] + (endColor[0] - startColor[0]) * progressRatio);
+    const g = Math.floor(startColor[1] + (endColor[1] - startColor[1]) * progressRatio);
+    const b = Math.floor(startColor[2] + (endColor[2] - startColor[2]) * progressRatio);
+    document.body.style.background = `linear-gradient(135deg, rgb(${r},${g},${b}), #fff2f2)`;
   }
   
-  function createConfetti() {
-    const confetti = document.createElement('div');
-    confetti.classList.add('confetti');
-    confetti.style.left = Math.random() * window.innerWidth + 'px';
-    confetti.style.top = '-20px';
-    const colors = ['#ff4d4d', '#ff9999', '#ffcccb', '#ffc0cb'];
-    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-    document.getElementById('fireworks').appendChild(confetti);
-    setTimeout(() => confetti.remove(), 2000);
+  // Fungsi partikel overlay sederhana (misalnya, titik-titik kecil yang bergerak secara acak)
+  function launchParticles() {
+    for (let i = 0; i < 30; i++) {
+      const particle = document.createElement("div");
+      particle.classList.add("particle");
+      particle.style.left = Math.random() * window.innerWidth + "px";
+      particle.style.top = Math.random() * window.innerHeight + "px";
+      particle.style.animationDuration = (Math.random() * 3 + 2) + "s";
+      particleOverlay.appendChild(particle);
+      setTimeout(() => particle.remove(), 5000);
+    }
   }
   
+  // Fungsi untuk animasi perayaan (fireworks dan confetti)
   function launchCelebration() {
     const fireworksContainer = document.getElementById("fireworks");
     fireworksContainer.style.display = "block";
@@ -112,21 +142,64 @@ const questions = [
     progressEl.style.width = "100%";
   }
   
+  // Fungsi untuk membuat elemen firework
+  function createFirework(x, y) {
+    const firework = document.createElement('div');
+    firework.classList.add('firework');
+    firework.style.left = x + 'px';
+    firework.style.top = y + 'px';
+    const offsetX = (Math.random() - 0.5) * 200;
+    const offsetY = (Math.random() - 0.5) * 200;
+    firework.style.setProperty('--x', offsetX + 'px');
+    firework.style.setProperty('--y', offsetY + 'px');
+    document.getElementById('fireworks').appendChild(firework);
+    setTimeout(() => firework.remove(), 1500);
+  }
+  
+  // Fungsi untuk membuat confetti
+  function createConfetti() {
+    const confetti = document.createElement('div');
+    confetti.classList.add('confetti');
+    confetti.style.left = Math.random() * window.innerWidth + 'px';
+    confetti.style.top = '-20px';
+    const colors = ['#ff4d4d', '#ff9999', '#ffcccb', '#ffc0cb'];
+    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    document.getElementById('fireworks').appendChild(confetti);
+    setTimeout(() => confetti.remove(), 2000);
+  }
+  
+  // Fungsi saat kuis selesai
   function quizEnd() {
     launchCelebration();
-    const quizContainer = document.getElementById("quiz-container");
-    quizContainer.innerHTML = "<h1>Selamat! 🎉</h1>";
-    
-    // Hitung waktu kuis
     const quizEndTime = Date.now();
     const timeTaken = Math.floor((quizEndTime - quizStartTime) / 1000);
     
-    // Tampilkan statistik
-    const statDiv = document.getElementById("statistics");
-    statDiv.classList.remove("hidden");
-    document.getElementById("statText").innerText = `Kamu menjawab ${totalQuestions} pertanyaan dengan benar dalam ${timeTaken} detik!`;
+    // Hitung total percobaan dan persentase rata-rata percobaan per pertanyaan
+    let totalAttemptsForQuiz = questions.reduce((sum, q) => sum + q.attempts, 0);
+    const averageAttempts = (totalAttemptsForQuiz / totalQuestions).toFixed(1);
+    const successRate = ((totalQuestions / totalAttemptsForQuiz) * 100).toFixed(0);
+    
+    // Tampilkan statistik dengan umpan balik dinamis berdasarkan performa
+    quizContainer.innerHTML = `<h1>Selamat, ${userName}! 🎉</h1>`;
+    statisticsEl.classList.remove("hidden");
+    statTextEl.innerText = `Kamu menjawab ${totalQuestions} pertanyaan dengan benar dalam ${timeTaken} detik.
+    Rata-rata percobaan per pertanyaan: ${averageAttempts}.
+    Tingkat keberhasilan: ${successRate}%.`;
+    
+    // Umpan balik dinamis
+    if(successRate >= 90) {
+      performanceMessageEl.innerText = "Luar biasa! Kamu benar-benar mengenalku dengan sempurna!";
+    } else if(successRate >= 70) {
+      performanceMessageEl.innerText = "Bagus! Tapi masih ada ruang untuk lebih mengenal lagi.";
+    } else {
+      performanceMessageEl.innerText = "Hmmm, ayo coba lagi supaya semakin dekat!";
+    }
+    
+    // Luncurkan partikel overlay sebagai sentuhan akhir
+    launchParticles();
   }
   
+  // Toggle musik
   function toggleMusic() {
     const musicBtn = document.getElementById("musicToggle");
     if (isMusicPlaying) {
@@ -138,5 +211,19 @@ const questions = [
       isMusicPlaying = true;
       musicBtn.textContent = "Hentikan Musik 🎵";
     }
+  }
+  
+  // Fungsi untuk mengulang kuis (restart)
+  function restartQuiz() {
+    // Reset variabel
+    currentQuestion = 0;
+    totalAttempts = 0;
+    questions.forEach(q => q.attempts = 0);
+    statisticsEl.classList.add("hidden");
+    quizContainer.classList.remove("hidden");
+    // Reset background
+    updateBackground(0);
+    quizStartTime = Date.now();
+    showQuestion();
   }
   

@@ -5,11 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kuis Pasangan - Cerita Interaktif</title>
   <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Kamu dapat menambahkan library GSAP jika ingin animasi yang lebih kompleks -->
 </head>
 <body>
-  <!-- Kontrol Musik -->
-  <div id="audio-controls">
+  <!-- Tampilan Awal: Form Input untuk Personalisasi -->
+  <div id="start-screen">
+    <h1>Selamat Datang!</h1>
+    <p>Masukkan nama kamu agar pengalaman kuis lebih personal:</p>
+    <input type="text" id="userNameInput" placeholder="Nama kamu...">
+    <button onclick="startQuiz()">Mulai Kuis</button>
+  </div>
+
+  <!-- Kontrol Audio -->
+  <div id="audio-controls" class="hidden">
     <button id="musicToggle" onclick="toggleMusic()">Hentikan Musik 🎵</button>
     <label for="volumeSlider">Volume:</label>
     <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.3">
@@ -23,24 +31,35 @@
   <audio id="correctSound" src="https://www.soundjay.com/misc/sounds/applause-8.mp3"></audio>
   <audio id="wrongSound" src="https://www.soundjay.com/button/sounds/button-10.mp3"></audio>
   
-  <div id="quiz-container">
-    <h1>Kuis Pasangan 💕</h1>
+  <!-- Container Kuis -->
+  <div id="quiz-container" class="hidden">
+    <h1 id="quiz-title">Kuis Pasangan 💕</h1>
     <!-- Progress Bar -->
     <div id="progress-container">
       <div id="progress"></div>
     </div>
-    <p id="question" class="fade"></p>
-    <!-- Area cerita interaktif -->
-    <p id="story" class="story"></p>
+    <div id="question-container" class="slide-in">
+      <p id="question"></p>
+      <!-- Cerita Interaktif singkat untuk tiap pertanyaan -->
+      <p id="story" class="story"></p>
+    </div>
     <input type="text" id="answer" placeholder="Jawaban kamu...">
     <button onclick="checkAnswer()">Submit</button>
     <p id="feedback"></p>
   </div>
+  
+  <!-- Overlay Partikel Dinamis (Background) -->
+  <div id="particle-overlay"></div>
+  
+  <!-- Container untuk animasi perayaan -->
   <div id="fireworks"></div>
   
+  <!-- Statistik Akhir Kuis -->
   <div id="statistics" class="hidden">
     <h2>Hasil Kuis</h2>
     <p id="statText"></p>
+    <p id="performanceMessage"></p>
+    <button onclick="restartQuiz()">Ulangi Kuis</button>
   </div>
   
   <script src="script.js"></script>

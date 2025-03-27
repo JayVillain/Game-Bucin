@@ -1,22 +1,48 @@
-/* Reset margin & padding */
+/* Reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
   
+  /* Body dan background dinamis */
   body {
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(135deg, #ffe6e6, #fff2f2);
+    min-height: 100vh;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
-    overflow-x: hidden;
+    transition: background 1s ease;
   }
   
-  /* Audio control container */
+  /* Tampilan Awal */
+  #start-screen {
+    text-align: center;
+  }
+  #start-screen input {
+    padding: 10px;
+    margin: 15px 0;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+  }
+  #start-screen button {
+    padding: 10px 20px;
+    background-color: #ff4d4d;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  #start-screen button:hover {
+    background-color: #e60000;
+  }
+  
+  /* Kontrol Audio */
   #audio-controls {
     position: fixed;
     top: 20px;
@@ -28,6 +54,9 @@
     display: flex;
     align-items: center;
     gap: 10px;
+  }
+  #audio-controls.hidden {
+    display: none;
   }
   #audio-controls button {
     border: none;
@@ -42,7 +71,7 @@
     background: #ffe6e6;
   }
   
-  /* Quiz container */
+  /* Quiz Container */
   #quiz-container {
     background: #ffffff;
     border-radius: 15px;
@@ -51,20 +80,25 @@
     max-width: 500px;
     width: 90%;
     text-align: center;
-    animation: fadeIn 1s ease-out;
-    margin-top: 80px;
+    margin-top: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.5s ease;
+  }
+  .hidden {
+    display: none;
   }
   
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
+  /* Animasi Transisi (Slide-In/Slide-Out) */
+  .slide-in {
+    animation: slideIn 0.5s forwards;
+  }
+  @keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
   }
   
-  h1 {
-    color: #ff4d4d;
-    margin-bottom: 20px;
-  }
-  
+  /* Progress Bar */
   #progress-container {
     background: #ddd;
     border-radius: 5px;
@@ -81,6 +115,7 @@
     transition: width 0.5s ease;
   }
   
+  /* Question & Story */
   #question {
     font-size: 1.2em;
     margin-bottom: 15px;
@@ -91,15 +126,13 @@
   #question.show {
     opacity: 1;
   }
-  
   .story {
     font-size: 1em;
     margin-bottom: 15px;
     color: #555;
-    height: 1.2em;
-    transition: opacity 0.5s ease;
   }
   
+  /* Input & Button */
   input[type="text"] {
     width: 80%;
     padding: 12px;
@@ -113,7 +146,6 @@
     border-color: #ff4d4d;
     outline: none;
   }
-  
   button {
     padding: 12px 25px;
     background-color: #ff4d4d;
@@ -129,7 +161,6 @@
     background-color: #e60000;
     transform: scale(1.05);
   }
-  
   #feedback {
     color: #e60000;
     font-size: 1em;
@@ -148,7 +179,18 @@
     75% { transform: translateX(-5px); }
   }
   
-  /* Fireworks container & elemen */
+  /* Overlay Partikel (Background Dinamis) */
+  #particle-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 50;
+  }
+  
+  /* Fireworks & Confetti */
   #fireworks {
     position: fixed;
     top: 0;
@@ -178,8 +220,6 @@
       opacity: 0;
     }
   }
-  
-  /* Confetti effect */
   .confetti {
     position: absolute;
     width: 10px;
@@ -200,18 +240,12 @@
     }
   }
   
-  /* Statistik */
+  /* Statistik Akhir */
   #statistics {
     margin-top: 20px;
     text-align: center;
   }
-  #statistics.hidden {
-    display: none;
-  }
-  
-  @media (max-width: 600px) {
-    h1 { font-size: 1.8em; }
-    #question { font-size: 1.1em; }
-    input[type="text"], button { font-size: 0.9em; }
+  #statistics h2 {
+    margin-bottom: 15px;
   }
   
