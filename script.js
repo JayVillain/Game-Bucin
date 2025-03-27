@@ -13,13 +13,13 @@ const questions = [
   }
   
   function checkAnswer() {
-    let answer = document.getElementById("answer").value.toLowerCase().trim();
+    const answer = document.getElementById("answer").value.toLowerCase().trim();
     if (answer === questions[currentQuestion].a.toLowerCase()) {
       currentQuestion++;
       if (currentQuestion < questions.length) {
         showQuestion();
       } else {
-        showFireworks();
+        celebrateSuccess();
       }
     } else {
       document.getElementById("feedback").innerText = "Jawaban salah, coba lagi!";
@@ -31,29 +31,45 @@ const questions = [
     firework.classList.add('firework');
     firework.style.left = x + 'px';
     firework.style.top = y + 'px';
-    // Random arah ledakan
-    const offsetX = (Math.random() - 0.5) * 200; // rentang -100 sampai 100
+    const offsetX = (Math.random() - 0.5) * 200;
     const offsetY = (Math.random() - 0.5) * 200;
     firework.style.setProperty('--x', offsetX + 'px');
     firework.style.setProperty('--y', offsetY + 'px');
     document.getElementById('fireworks').appendChild(firework);
-    // Hapus elemen setelah animasi selesai
     setTimeout(() => firework.remove(), 1500);
   }
   
-  function showFireworks() {
-    // Ubah tampilan quiz container dengan pesan selamat
-    document.getElementById("quiz-container").innerHTML = "<h1>Selamat! 🎉</h1><p>Kamu berhasil menjawab semua pertanyaan!</p>";
+  function createConfetti() {
+    const confetti = document.createElement('div');
+    confetti.classList.add('confetti');
+    confetti.style.left = Math.random() * window.innerWidth + 'px';
+    confetti.style.top = '-20px';
+    const colors = ['#ff4d4d', '#ff9999', '#ffcccb', '#ffc0cb'];
+    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    document.getElementById('fireworks').appendChild(confetti);
+    setTimeout(() => confetti.remove(), 2000);
+  }
+  
+  function celebrateSuccess() {
+    const quizContainer = document.getElementById("quiz-container");
+    quizContainer.innerHTML = "<h1>Selamat! 🎉</h1><p>Kamu berhasil menjawab semua pertanyaan!</p>";
     const fireworksContainer = document.getElementById("fireworks");
     fireworksContainer.style.display = "block";
-    const numberOfFireworks = 30;
+    
+    // Tampilkan fireworks
+    const numberOfFireworks = 40;
     for (let i = 0; i < numberOfFireworks; i++) {
       const x = Math.random() * window.innerWidth;
-      const y = Math.random() * window.innerHeight;
+      const y = Math.random() * window.innerHeight * 0.8;
       createFirework(x, y);
     }
-    // Sembunyikan container fireworks setelah animasi selesai
-    setTimeout(() => { fireworksContainer.style.display = "none"; }, 2000);
+    
+    // Tampilkan confetti secara berulang
+    const confettiInterval = setInterval(createConfetti, 100);
+    setTimeout(() => {
+      clearInterval(confettiInterval);
+      fireworksContainer.style.display = "none";
+    }, 3000);
   }
   
   showQuestion();
