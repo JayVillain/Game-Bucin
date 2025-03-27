@@ -1,7 +1,7 @@
 const questions = [
     { q: "Apa makanan favorit aku?", a: "pizza" },
     { q: "Dimana kita pertama kali ketemu?", a: "mall" },
-    { q: "Tanggal jadian kita? (DD/MM/YYYY)", a: "14/02/2023" }
+    { q: "Tanggal jadian kita? (Tgl-Bln-Thn)", a: "27-7-2024" }
   ];
   
   let currentQuestion = 0;
